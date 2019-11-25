@@ -1,10 +1,11 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 const User = require('../user/model');
+const Event = require('../events/model');
 
-const Event = db.define('event', {
-  name: {
-    type: Sequelize.STRING,
+const Ticket = db.define('ticket', {
+  price: {
+    type: Sequelize.FLOAT,
     allowNull: false
   },
   description: {
@@ -13,18 +14,11 @@ const Event = db.define('event', {
   },
   image: {
     type: Sequelize.STRING,
-    allowNull: false
-  },
-  start_date: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  end_date: {
-    type: Sequelize.STRING,
     allowNull: true
   }
 });
 
-Event.belongsTo(User);
+Ticket.belongsTo(User);
+Ticket.belongsTo(Event);
 
-module.exports = Event;
+module.exports = Ticket;
