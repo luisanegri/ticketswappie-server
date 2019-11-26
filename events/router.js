@@ -14,8 +14,8 @@ router.get('/event', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.get('/event/:id', (req, res, next) => {
-  Event.findByPk(req.params.id)
+router.get('/event/:eventId', (req, res, next) => {
+  Event.findByPk(req.params.eventId)
     .then(event => {
       if (!event) {
         res.status(404).end();
@@ -26,16 +26,15 @@ router.get('/event/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.put('/event/:id', (req, res, next) => {
-  Event.findByPk(req.params.id)
+router.put('/event/:eventId', (req, res, next) => {
+  Event.findByPk(req.params.eventId)
     .then(event => event.update(req.body))
     .then(event => res.send(event))
     .catch(error => next(error));
 });
 
-router.delete('/event/:id', (req, res, next) => {
-  // pass the event id to where object
-  Event.destroy({ where: { id: req.params.id } })
+router.delete('/event/:eventId', (req, res, next) => {
+  Event.destroy({ where: { id: req.params.eventId } })
     .then(number => res.send({ number }))
     .catch(error => next(error));
 });

@@ -5,7 +5,7 @@ const Event = require('../events/model');
 
 const Ticket = db.define('ticket', {
   price: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   description: {

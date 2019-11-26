@@ -2,8 +2,19 @@ const { Router } = require('express');
 const Ticket = require('./model');
 const router = new Router();
 
-router.post('/ticket', (req, res, next) => {
-  Ticket.create(req.body)
+// router.post('/ticket', (req, res, next) => {
+//   Ticket.create(req.body)
+//     .then(ticket => res.send(ticket))
+//     .catch(error => next(error));
+// });
+
+router.post('/event/:eventId/ticket', (req, res, next) => {
+  Ticket.create({
+    description: req.body.description,
+    price: req.body.price,
+    image: req.body.image,
+    eventId: req.params.eventId
+  })
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
 });
@@ -33,7 +44,7 @@ router.put('/ticket/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.delete('/event/:id', (req, res, next) => {
+router.delete('/ticket/:id', (req, res, next) => {
   // pass the event id to where object
   Ticket.destroy({ where: { id: req.params.id } })
     .then(number => res.send({ number }))
