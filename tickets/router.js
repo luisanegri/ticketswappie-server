@@ -5,8 +5,6 @@ const router = new Router();
 router.post('/event/:eventId/ticket', (req, res, next) => {
   Ticket.create({
     ...req.body,
-    // eventId is undefined on the frontend but not on the
-    // backend database
     eventId: req.params.eventId
   })
     .then(event => {
