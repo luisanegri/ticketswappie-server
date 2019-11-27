@@ -9,9 +9,8 @@ router.post('/event/:eventId/ticket', (req, res, next) => {
     // backend database
     eventId: req.params.eventId
   })
-    .then(ticket => {
-      res.json(ticket);
-      console.log({ ticket: ticket });
+    .then(event => {
+      res.json(event);
     })
     .catch(error => next(error));
 });
