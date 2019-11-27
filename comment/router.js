@@ -5,8 +5,6 @@ const router = new Router();
 router.post('/ticket/:ticketId/comment', (req, res, next) => {
   Comment.create({
     ...req.body,
-    // eventId is undefined on the frontend but not on the
-    // backend database
     ticketId: req.params.ticketId
   })
     .then(comment => res.send(comment))

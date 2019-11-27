@@ -1,30 +1,30 @@
 const { Router } = require('express');
 const Ticket = require('./model');
 const router = new Router();
+const auth = require('../auth/middleware');
 
-router.post('/event/:eventId/ticket', (req, res, next) => {
+router.post('/event/:eventId/ticket', auth, (req, res, next) => {
   Ticket.create({
     ...req.body,
     // eventId is undefined on the frontend but not on the
     // backend database
     eventId: req.params.eventId
   })
-    .then(ticket => {
-      res.json(ticket);
-      console.log({ ticket: ticket });
+    .then(event => {
+      res.json(event);
     })
     .catch(error => next(error));
 });
 
 // get all tickets from specific event
-router.get('/event/:eventId/ticket', (req, res, next) => {
+router.get('/event/:eventId/ticket', auth, (req, res, next) => {
   Ticket.findAll({ where: { eventId: req.params.eventId } })
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
 });
 
 // get single ticket
-router.get('/ticket/:ticketId', (req, res, next) => {
+router.get('/ticket/:ticketId', auth, (req, res, next) => {
   Ticket.findOne({
     where: { id: req.params.ticketId }
   })
