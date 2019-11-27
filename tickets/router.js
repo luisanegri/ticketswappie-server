@@ -2,31 +2,32 @@ const { Router } = require('express');
 const Ticket = require('./model');
 const router = new Router();
 
-// router.post('/ticket', (req, res, next) => {
-//   Ticket.create(req.body)
-//     .then(ticket => res.send(ticket))
-//     .catch(error => next(error));
-// });
-
 router.post('/event/:eventId/ticket', (req, res, next) => {
   Ticket.create({
-    description: req.body.description,
-    price: req.body.price,
-    image: req.body.image,
+    ...req.body,
+    // eventId is undefined on the frontend but not on the
+    // backend database
     eventId: req.params.eventId
   })
+    .then(ticket => {
+      res.json(ticket);
+      console.log({ ticket: ticket });
+    })
+    .catch(error => next(error));
+});
+
+// get all tickets from specific event
+router.get('/event/:eventId/ticket', (req, res, next) => {
+  Ticket.findAll({ where: { eventId: req.params.eventId } })
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
 });
 
-router.get('/ticket', (req, res, next) => {
-  Ticket.findAll()
-    .then(ticket => res.send(ticket))
-    .catch(error => next(error));
-});
-
-router.get('/ticket/:id', (req, res, next) => {
-  Ticket.findByPk(req.params.id)
+// get single ticket
+router.get('/ticket/:ticketId', (req, res, next) => {
+  Ticket.findOne({
+    where: { id: req.params.ticketId }
+  })
     .then(ticket => {
       if (!ticket) {
         res.status(404).end();
@@ -37,15 +38,16 @@ router.get('/ticket/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.put('/ticket/:id', (req, res, next) => {
-  Ticket.findByPk(req.params.id)
+router.put('/event/:eventId/ticket/:ticketId', (req, res, next) => {
+  Ticket.findByPk({
+    where: { id: req.params.ticketId, eventId: req.params.eventId }
+  })
     .then(ticket => ticket.update(req.body))
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
 });
 
 router.delete('/ticket/:id', (req, res, next) => {
-  // pass the event id to where object
   Ticket.destroy({ where: { id: req.params.id } })
     .then(number => res.send({ number }))
     .catch(error => next(error));

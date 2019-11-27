@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const Event = require('./model');
 const router = new Router();
+const Ticket = require('../tickets/model');
 
 router.post('/event', (req, res, next) => {
   Event.create(req.body)
@@ -9,7 +10,7 @@ router.post('/event', (req, res, next) => {
 });
 
 router.get('/event', (req, res, next) => {
-  Event.findAll()
+  Event.findAll({ include: [Ticket] })
     .then(event => res.send(event))
     .catch(error => next(error));
 });

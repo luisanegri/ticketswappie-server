@@ -19,6 +19,7 @@ const Ticket = db.define('ticket', {
 });
 
 Ticket.belongsTo(User);
-Ticket.belongsTo(Event);
+User.hasMany(Ticket);
+//rsTicket.belongsTo(Event);
 
 module.exports = Ticket;
