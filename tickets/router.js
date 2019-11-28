@@ -4,6 +4,7 @@ const router = new Router();
 const auth = require('../auth/middleware');
 
 router.post('/event/:eventId/ticket', auth, (req, res, next) => {
+  console.log(req.body, 'req');
   Ticket.create({
     ...req.body,
     eventId: req.params.eventId
