@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const Ticket = require('./model');
 const router = new Router();
+const auth = require('../auth/middleware');
 
-router.post('/event/:eventId/ticket', (req, res, next) => {
+router.post('/event/:eventId/ticket', auth, (req, res, next) => {
   Ticket.create({
     ...req.body,
     eventId: req.params.eventId
@@ -36,7 +37,7 @@ router.get('/ticket/:ticketId', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.put('/event/:eventId/ticket/:ticketId', (req, res, next) => {
+router.put('/event/:eventId/ticket/:ticketId', auth, (req, res, next) => {
   Ticket.findByPk({
     where: { id: req.params.ticketId, eventId: req.params.eventId }
   })
