@@ -21,6 +21,7 @@ router.get('/event/:eventId/ticket', (req, res, next) => {
 });
 
 // get single ticket
+// implement risk algorithm
 router.get('/ticket/:ticketId', (req, res, next) => {
   Ticket.findOne({
     where: { id: req.params.ticketId }
