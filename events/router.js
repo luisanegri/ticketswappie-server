@@ -10,13 +10,13 @@ router.post('/event', auth, (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.get('/event', auth, (req, res, next) => {
+router.get('/event', (req, res, next) => {
   Event.findAll({ include: [Ticket] })
     .then(event => res.send(event))
     .catch(error => next(error));
 });
 
-router.get('/event/:eventId', auth, (req, res, next) => {
+router.get('/event/:eventId', (req, res, next) => {
   Event.findByPk(req.params.eventId)
     .then(event => {
       if (!event) {
