@@ -7,10 +7,13 @@ const Comment = db.define('comment', {
   comment: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  username: {
+    type: Sequelize.STRING
   }
 });
 
 Comment.belongsTo(User);
-Comment.belongsTo(Ticket);
+// Comment.belongsTo(Ticket, { foreignKey: commentId });
 
 module.exports = Comment;
