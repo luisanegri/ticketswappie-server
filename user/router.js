@@ -8,8 +8,8 @@ router.get('/user', async (req, res, next) => {
   try {
     const user = await User.findAll();
     res.send(user);
-  } catch {
-    console.log(next);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -18,7 +18,6 @@ router.post('/user', async (req, res, next) => {
   if (username === '' || email === '' || password === '') {
     return res.status(400).send('Entry all inputs');
   }
-  console.log({ USER_NAME: username, PASSWORD: password, EMAIL: email });
 
   try {
     const newUser = await User.create({

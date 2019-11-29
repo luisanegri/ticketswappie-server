@@ -5,7 +5,6 @@ const auth = require('../auth/middleware');
 const Comment = require('../comment/model');
 
 router.post('/event/:eventId/ticket', auth, (req, res, next) => {
-  console.log(req.body, 'req');
   Ticket.create({
     ...req.body,
     eventId: req.params.eventId
@@ -38,12 +37,12 @@ router.get('/ticket/:ticketId', (req, res, next) => {
       }
     })
     .catch(error => next(error));
+
+  // res.json({ ticket, risk });
 });
 
 router.put('/event/:eventId/ticket/:ticketId', auth, (req, res, next) => {
-  Ticket.findByPk({
-    where: { id: req.params.ticketId, eventId: req.params.eventId }
-  })
+  Ticket.findByPk(req.params.ticketId)
     .then(ticket => ticket.update(req.body))
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
