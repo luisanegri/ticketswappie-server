@@ -2,6 +2,7 @@ const { Router } = require('express');
 const Ticket = require('./model');
 const router = new Router();
 const auth = require('../auth/middleware');
+const Comment = require('../comment/model');
 
 router.post('/event/:eventId/ticket', auth, (req, res, next) => {
   console.log(req.body, 'req');
@@ -17,7 +18,7 @@ router.post('/event/:eventId/ticket', auth, (req, res, next) => {
 
 // get all tickets from specific event
 router.get('/event/:eventId/ticket', (req, res, next) => {
-  Ticket.findAll({ where: { eventId: req.params.eventId } })
+  Ticket.findAll({ include: [Comment], where: { eventId: req.params.eventId } })
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
 });
