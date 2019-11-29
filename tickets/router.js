@@ -27,6 +27,7 @@ router.get('/event/:eventId/ticket', (req, res, next) => {
 // implement risk algorithm
 router.get('/ticket/:ticketId', (req, res, next) => {
   Ticket.findOne({
+    include: [Comment],
     where: { id: req.params.ticketId }
   })
     .then(ticket => {
