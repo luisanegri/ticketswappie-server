@@ -59,7 +59,7 @@ router.put('event/eventId/ticket/:ticketId', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.delete('/ticket/:ticketId', (req, res, next) => {
+router.delete('/ticket/:ticketId', auth, (req, res, next) => {
   Ticket.destroy({ where: { id: req.params.ticketId } })
     .then(number => res.send({ number }))
     .catch(error => next(error));

@@ -26,8 +26,8 @@ router.post('/user', async (req, res, next) => {
       password: bcrypt.hashSync(password, 10)
     });
     res.json(newUser);
-  } catch {
-    console.log(next);
+  } catch (err) {
+    next(err);
   }
 });
 
