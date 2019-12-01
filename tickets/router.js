@@ -18,31 +18,38 @@ router.post('/event/:eventId/ticket', auth, (req, res, next) => {
 
 // get all tickets from specific event
 router.get('/event/:eventId/ticket', async (req, res, next) => {
-  const tickets = await Ticket.findAll({
-    include: [Comment],
-    where: { eventId: req.params.eventId }
-  });
-  // add risk to each ticket
-  const ticketsMapped = tickets.map(ticket => {
-    let item = calcTicket(ticket);
-    //console.log('promise intern', typeof item);
-    return item;
-  });
-  // when resolve an array of promisses you use promise.all
-  Promise.all(ticketsMapped).then(result => res.json(result));
-  //console.log('ticketMapped', ticketsMapped);
+  try {
+    const tickets = await Ticket.findAll({
+      include: [Comment],
+      where: { eventId: req.params.eventId }
+    });
+    // inject risk to each ticket
+    const ticketsMapped = tickets.map(ticket => {
+      let item = calcTicket(ticket);
+      //console.log('promise intern', typeof item);
+      return item;
+    });
+    // resolve an array of promisses use promise.all
+    Promise.all(ticketsMapped).then(result => res.json(result));
+  } catch (err) {
+    next(err);
+  }
 });
 
 // get single ticket
 router.get('/ticket/:ticketId', async (req, res, next) => {
-  const ticket = await Ticket.findOne({
-    include: [Comment],
-    where: { id: req.params.ticketId }
-  });
+  try {
+    const ticket = await Ticket.findOne({
+      include: [Comment],
+      where: { id: req.params.ticketId }
+    });
 
-  let calc = await calcTicket(ticket);
+    let calc = await calcTicket(ticket);
 
-  res.json(calc);
+    res.json(calc);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.put('event/eventId/ticket/:ticketId', (req, res, next) => {
