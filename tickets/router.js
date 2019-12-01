@@ -3,6 +3,7 @@ const Ticket = require('./model');
 const router = new Router();
 const auth = require('../auth/middleware');
 const Comment = require('../comment/model');
+const calcTicket = require('./algorithm');
 
 router.post('/event/:eventId/ticket', auth, (req, res, next) => {
   Ticket.create({
@@ -16,40 +17,43 @@ router.post('/event/:eventId/ticket', auth, (req, res, next) => {
 });
 
 // get all tickets from specific event
-router.get('/event/:eventId/ticket', (req, res, next) => {
-  Ticket.findAll({ include: [Comment], where: { eventId: req.params.eventId } })
-    .then(ticket => res.send(ticket))
-    .catch(error => next(error));
+router.get('/event/:eventId/ticket', async (req, res, next) => {
+  const tickets = await Ticket.findAll({
+    include: [Comment],
+    where: { eventId: req.params.eventId }
+  });
+  // add risk to each ticket
+  const ticketsMapped = tickets.map(ticket => {
+    let item = calcTicket(ticket);
+    //console.log('promise intern', typeof item);
+    return item;
+  });
+  // when resolve an array of promisses you use promise.all
+  Promise.all(ticketsMapped).then(result => res.json(result));
+  //console.log('ticketMapped', ticketsMapped);
 });
 
 // get single ticket
-// implement risk algorithm
-router.get('/ticket/:ticketId', (req, res, next) => {
-  Ticket.findOne({
+router.get('/ticket/:ticketId', async (req, res, next) => {
+  const ticket = await Ticket.findOne({
     include: [Comment],
     where: { id: req.params.ticketId }
-  })
-    .then(ticket => {
-      if (!ticket) {
-        res.status(404).end();
-      } else {
-        res.status(201).json(ticket);
-      }
-    })
-    .catch(error => next(error));
+  });
 
-  // res.json({ ticket, risk });
+  let calc = await calcTicket(ticket);
+
+  res.json(calc);
 });
 
-router.put('/event/:eventId/ticket/:ticketId', auth, (req, res, next) => {
+router.put('event/eventId/ticket/:ticketId', (req, res, next) => {
   Ticket.findByPk(req.params.ticketId)
     .then(ticket => ticket.update(req.body))
     .then(ticket => res.send(ticket))
     .catch(error => next(error));
 });
 
-router.delete('/ticket/:id', (req, res, next) => {
-  Ticket.destroy({ where: { id: req.params.id } })
+router.delete('/ticket/:ticketId', (req, res, next) => {
+  Ticket.destroy({ where: { id: req.params.ticketId } })
     .then(number => res.send({ number }))
     .catch(error => next(error));
 });

@@ -19,6 +19,15 @@ const Ticket = db.define('ticket', {
   },
   username: {
     type: Sequelize.STRING
+  },
+  userId: {
+    type: Sequelize.INTEGER
+  },
+  eventId: {
+    type: Sequelize.INTEGER
+  },
+  risk: {
+    type: Sequelize.INTEGER
   }
 });
 

@@ -11,26 +11,37 @@ if (countUserTickets === 1) {
 }
 // TASK 2:
 // find tickets of specific event
-const eventTickets = Ticket.find({ where: { event: ticket.eventId } });
+const eventTickets = Ticket.findAll({ where: { event: ticket.eventId } });
 // map price of all event tickets
-const eventTicketsPrice = eventTickets.map(ticket => ticket.price);
+//const eventTicketsPrice = eventTickets.map(ticket => ticket.price);
 // find amount of tickets
-const countEventTickets = eventTicketsPrice.length;
+//const countEventTickets = eventTicketsPrice.length;
 // calculate average sum of all tickets price divided by amount of tickets
 const avgTicketPrice =
-  eventTicketsPrice.reduce((a, b) => {
-    return a + b;
-  }, 0) / countEventTickets;
+  eventTickets.reduce((a, b) => {
+    return a + b.price;
+  }, 0) / eventTickets.length;
 
-if (ticket.price < avgTicketPrice) {
-  const difference = ticket.price - avgTicketPrice;
-  const diffPercentage = (difference / avgTicketPrice) * 100;
-  if (ticket.price < diffPercentage) {
-    ticket.risk += diffPercentage;
-  } else if (ticket.price > diffPercentage) {
-    ticket.risk -= diffPercentage;
+if (ticket.price > avgTicketPrice) {
+  const difference1 = ticket.price - avgTicketPrice;
+  const diffPercentage = ((difference1 / avgTicketPrice) * 100).toFixed(2);
+  if (diffPercentage > 10) {
+    risk -= 10;
+  } else {
+    risk -= diffPercentage;
   }
+} else if (ticket.price < avgTicketPrice) {
+  const difference2 = avgTicketPrice - ticket.price;
+  const diffPercentage = ((difference2 / avgTicketPrice) * 100).toFixed(2);
+  ticket.risk += diffPercentage;
 }
+
+// if (ticket.price < diffPercentage) {
+//   ticket.risk += diffPercentage;
+// } else if (ticket.price > diffPercentage) {
+//   ticket.risk -= diffPercentage;
+// }
+
 // TASK 3:
 // find how to get only the time as there is also date in value
 const timeCreated = ticket.createdAt;
