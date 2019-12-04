@@ -12,8 +12,8 @@ router.post('/ticket/:ticketId/comment', auth, (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.get('/comment', (req, res, next) => {
-  Comment.findAll()
+router.get('/:ticketId/comment', (req, res, next) => {
+  Comment.findAll({ where: { ticketId: req.params.ticketId } })
     .then(comment => res.send(comment))
     .catch(error => next(error));
 });
