@@ -6,14 +6,14 @@ const Ticket = require('../tickets/model');
 const Comment = db.define('comment', {
   comment: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
-  username: {
-    type: Sequelize.STRING
-  }
 });
 
-Comment.belongsTo(User);
-// Comment.belongsTo(Ticket, { foreignKey: commentId });
+// Comment.belongsTo(User);
+// User.hasMany(Ticket);
+
+Comment.belongsTo(User, { as: 'user', foreignKey: 'userId' });
+// Comment.belongsTo(Ticket, { as: 'ticket', foreignKey: 'ticketId' });
 
 module.exports = Comment;

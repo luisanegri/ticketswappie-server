@@ -6,24 +6,20 @@ const Ticket = require('../tickets/model');
 const Event = db.define('event', {
   name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
   description: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
   image: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
   start_date: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
-  end_date: {
-    type: Sequelize.STRING,
-    allowNull: true
-  }
 });
 
 Event.belongsTo(User);
