@@ -12,6 +12,14 @@ const Event = db.define('event', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  price: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+  location: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
   image: {
     type: Sequelize.STRING,
     allowNull: false,
