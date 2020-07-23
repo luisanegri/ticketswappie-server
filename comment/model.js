@@ -8,12 +8,11 @@ const Comment = db.define('comment', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  username: {
+    type: Sequelize.STRING,
+  },
 });
 
-// Comment.belongsTo(User);
-// User.hasMany(Ticket);
-
 Comment.belongsTo(User, { as: 'user', foreignKey: 'userId' });
-// Comment.belongsTo(Ticket, { as: 'ticket', foreignKey: 'ticketId' });
 
 module.exports = Comment;
